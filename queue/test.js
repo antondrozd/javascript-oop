@@ -1,6 +1,6 @@
 const Queue = require('./');
 
-xdescribe('Queue', () => {
+describe('Queue', () => {
     describe('Queue.constructor()', () => {
         test('возвращает объект типа `Queue`', () => {
             expect(new Queue()).toBeInstanceOf(Queue);
@@ -58,7 +58,7 @@ xdescribe('Queue', () => {
             queue.enqueue(1);
             queue.enqueue(2);
             queue.enqueue(3);
-    
+
             expect(queue.back).toBe(3);
         });
     });
@@ -72,7 +72,7 @@ xdescribe('Queue', () => {
             queue.enqueue(3);
 
             queue.dequeue();
-    
+
             expect(queue.size).toBe(2);
         });
 
@@ -84,7 +84,7 @@ xdescribe('Queue', () => {
             queue.enqueue(3);
 
             let item = queue.dequeue();
-    
+
             expect(item).toBe(1);
         });
     });

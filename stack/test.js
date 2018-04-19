@@ -1,6 +1,6 @@
 const Stack = require('./');
 
-xdescribe('Stack', () => {
+describe('Stack', () => {
     describe('Stack.constructor()', () => {
         test('возвращает объект типа `Stack`', () => {
             expect(new Stack()).toBeInstanceOf(Stack);
@@ -42,7 +42,7 @@ xdescribe('Stack', () => {
             stack.push(1);
             stack.push(2);
             stack.push(3);
-    
+
             expect(stack.size).toBe(3);
         });
     });
@@ -56,7 +56,7 @@ xdescribe('Stack', () => {
             stack.push(3);
 
             stack.pop();
-    
+
             expect(stack.size).toBe(2);
         });
 
@@ -68,7 +68,7 @@ xdescribe('Stack', () => {
             stack.push(3);
 
             let item = stack.pop();
-    
+
             expect(item).toBe(3);
         });
     });
@@ -82,7 +82,7 @@ xdescribe('Stack', () => {
             stack.push(3);
 
             let item = stack.peek();
-    
+
             expect(stack.size).toBe(3);
             expect(item).toBe(3);
         });
