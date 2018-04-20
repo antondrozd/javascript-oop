@@ -1,6 +1,6 @@
 const Set = require('./');
 
-xdescribe('Set', () => {
+describe('Set', () => {
     describe('Set.constructor()', () => {
         test('возвращает объект типа `Set`', () => {
             expect(new Set()).toBeInstanceOf(Set);
@@ -32,7 +32,7 @@ xdescribe('Set', () => {
     describe('Set.has()', () => {
         let set;
 
-        beforeEach(() => set = new Set());
+        beforeEach(() => (set = new Set()));
 
         test('возвращает `false` если элемента нет', () => {
             expect(set.has(1)).toBe(false);
@@ -40,7 +40,7 @@ xdescribe('Set', () => {
 
         test('возвращает `true` если элемент есть', () => {
             set.add(1);
-    
+
             expect(set.has(1)).toBe(true);
         });
     });
@@ -48,18 +48,18 @@ xdescribe('Set', () => {
     describe('Set.add()', () => {
         let set;
 
-        beforeEach(() => set = new Set());
+        beforeEach(() => (set = new Set()));
 
         test('добавляет элемент', () => {
             set.add(1);
-    
+
             expect(set.has(1)).toBe(true);
         });
 
         test('не добавляет элемент, если он уже там есть', () => {
             set.add(1);
             set.add(1);
-    
+
             expect(set.size).toBe(1);
         });
     });
@@ -67,11 +67,11 @@ xdescribe('Set', () => {
     describe('Set.remove()', () => {
         let set;
 
-        beforeEach(() => set = new Set(1, 2));
+        beforeEach(() => (set = new Set(1, 2)));
 
         test('удаляет элемент', () => {
             set.remove(2);
-    
+
             expect(set.size).toBe(1);
         });
 
@@ -87,9 +87,9 @@ xdescribe('Set', () => {
     describe('Set.clear()', () => {
         test('удаляет все элементы', () => {
             let set = new Set(1, 2);
-            
+
             set.clear();
-    
+
             expect(set.size).toBe(0);
         });
     });
