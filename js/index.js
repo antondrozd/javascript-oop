@@ -18,5 +18,5 @@ function handleChange(activeTab) {
         } else {
             panel.classList.remove('active');
         }
-    })
+    });
 }
