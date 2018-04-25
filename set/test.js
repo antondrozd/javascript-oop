@@ -11,6 +11,12 @@ describe('Set', () => {
 
             expect(set.values).toEqual([1, 2, 3]);
         });
+
+        test('добавляет только уникальные элементы', () => {
+            let set = new Set(1, 2, 2);
+
+            expect(set.values).toEqual([1, 2]);
+        });
     });
 
     describe('Set.size', () => {

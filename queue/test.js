@@ -36,18 +36,20 @@ describe('Queue', () => {
     });
 
     describe('Queue.front', () => {
-        test('возвращает первый элемент в очереди', () => {
+        test('возвращает первый элемент в очереди, не удаляя его', () => {
             let queue = new Queue(1, 2, 3);
 
             expect(queue.front).toBe(1);
+            exppect(queue.size).toBe(3);
         });
     });
 
     describe('Queue.back', () => {
-        test('возвращает последний элемент в очереди', () => {
+        test('возвращает последний элемент в очереди, не удаляя его', () => {
             let queue = new Queue(1, 2, 3);
 
             expect(queue.back).toBe(3);
+            exppect(queue.size).toBe(3);
         });
     });
 
