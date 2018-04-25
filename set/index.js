@@ -4,7 +4,9 @@ class Set {
      * @param {...*} [items] Добавляемые элементы
      */
     constructor(...items) {
-        this._items = items;
+        this._items = [];
+
+        items.forEach(item => this.add(item));
     }
 
     /**
