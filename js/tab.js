@@ -50,10 +50,7 @@ export default class Tab {
     }
     set isActive(value) {
         this._active = value;
-
-        this._active
-            ? this._element.classList.add('active')
-            : this._element.classList.remove('active');
+        this._element.classList.toggle('active', value);
     }
 
     // @codedojo
