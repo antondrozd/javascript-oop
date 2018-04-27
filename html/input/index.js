@@ -12,7 +12,7 @@ class Input extends Element {
         required = false,
         ...args
     }) {
-        super({ ...args });
+        super({ ...args, tag: 'input' });
 
         this.type = type;
         this.name = name;
@@ -45,11 +45,7 @@ class Input extends Element {
      * @returns {boolean}
      */
     get isValid() {
-        if (this.required && this.value == undefined) {
-            return false;
-        }
-
-        return true;
+        this.required && this.value == undefined ? false : true;
     }
 }
 
