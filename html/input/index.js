@@ -45,7 +45,7 @@ class Input extends Element {
      * @returns {boolean}
      */
     get isValid() {
-        this.required && this.value == undefined ? false : true;
+        return this.required && this.value == undefined ? false : true;
     }
 }
 
