@@ -18,8 +18,8 @@ class EmailInput extends TextInput {
      */
     get isValid() {
         const emailRegEx = /^[a-zA-Z0-9'._%+-]+@[a-zA-Z0-9-][a-zA-Z0-9.-]*\.[a-zA-Z]{2,63}$/;
-        
-        return emailRegEx.test(this.value);
+
+        return super.isValid && emailRegEx.test(this.value);
     }
 }
 

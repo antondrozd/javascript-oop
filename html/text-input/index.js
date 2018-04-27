@@ -20,6 +20,7 @@ class TextInput extends Input {
      */
     get isValid() {
         return (
+            super.isValid &&
             this.value.length >= this.minlength &&
             this.value.length <= this.maxlength
         );
