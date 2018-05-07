@@ -21,7 +21,6 @@ class Checkbox extends Input {
 
     set checked(value) {
         this.value = value;
-        this.emit('change', value);
     }
 
     /**
