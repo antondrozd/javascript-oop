@@ -25,21 +25,13 @@ const questions = [
     },
     {
         text: 'Что отобразится в консоле?<br><br>console.log(typeof [1,2])',
-        answers: [
-            'string',
-            'array',
-            'object',
-            'number'
-        ],
+        answers: ['string', 'array', 'object', 'number'],
         correctAnswer: 2
     },
     {
-        text: 'Что будет результатом выражения?<br><br>new Boolean(new Boolean(false)).valueOf()',
-        answers: [
-            'true',
-            'false',
-            'undefined'
-        ],
+        text:
+            'Что будет результатом выражения?<br><br>new Boolean(new Boolean(false)).valueOf()',
+        answers: ['true', 'false', 'undefined'],
         correctAnswer: 0
     },
     {
@@ -57,7 +49,10 @@ const questions = [
 
 const root = document.querySelector('#app');
 
-const quiz = new Quiz('JS Quiz', questions.map(q => new Question(q.text, q.answers, q.correctAnswer)));
+const quiz = new Quiz(
+    'JS Quiz',
+    questions.map(q => new Question(q.text, q.answers, q.correctAnswer))
+);
 
 const app = new App(root, quiz);
 
