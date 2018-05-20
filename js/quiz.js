@@ -6,7 +6,8 @@ export default class Quiz {
     constructor(title = '', questions = []) {
         this.title = title;
         this.questions = questions;
-        this.questionIndex = 0;
+        this._questionIndex = 0;
+        this._score = 0;
     }
 
     /**
@@ -15,7 +16,7 @@ export default class Quiz {
      * @returns {Question}
      */
     get currentQuestion() {
-        return this.questions[this.questionIndex];
+        return this.questions[this._questionIndex];
     }
 
     /**
@@ -24,7 +25,15 @@ export default class Quiz {
      * @returns {boolean}
      */
     get hasEnded() {
-        return this.questionIndex === this.questions.length;
+        return this._questionIndex === this.questions.length;
+    }
+
+    get score() {
+        return this._score;
+    }
+
+    get questionIndex() {
+        return this._questionIndex;
     }
 
     /**
@@ -33,5 +42,13 @@ export default class Quiz {
      */
     checkAnswer(answer) {
         return this.currentQuestion.isCorrectAnswer(answer);
+    }
+
+    nextQuestion() {
+        this._questionIndex += 1;
+    }
+
+    incrementScore() {
+        this._score += 1;
     }
 }

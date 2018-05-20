@@ -6,7 +6,6 @@ export default class App {
     constructor(element, quiz) {
         this.element = element;
         this.quiz = quiz;
-        this.score = 0;
         this.questionElement;
         this.answersElement;
         this.progressElement;
@@ -45,10 +44,10 @@ export default class App {
         let selectedAnswer = event.target.textContent;
 
         if (this.quiz.checkAnswer(selectedAnswer)) {
-            this.score += 1;
+            this.quiz.incrementScore();
         }
 
-        this.quiz.questionIndex += 1;
+        this.quiz.nextQuestion();
         this.displayNext();
     }
 
@@ -109,6 +108,6 @@ export default class App {
      * Отображает результат теста.
      */
     displayScore() {
-        this.scoreElement.textContent = `Правильных ответов: ${this.score}`;
+        this.scoreElement.textContent = `Правильных ответов: ${this.quiz.score}`;
     }
 }
