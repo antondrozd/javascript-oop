@@ -12,11 +12,11 @@ export default class Question {
 
     /**
      * Проверяет правильность ответа.
-     * 
+     *
      * @param {number} answer
      * @returns {boolean}
      */
     isCorrectAnswer(answer) {
-        return answer === this.answers[this.correctAnswer];
+        return answer == this.correctAnswer;
     }
 }

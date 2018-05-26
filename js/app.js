@@ -11,17 +11,17 @@ export default class App {
         this.progressElement;
         this.scoreElement;
 
-        this.handleAnswerButtonClick = this.handleAnswerButtonClick.bind(this);
-
         this.init();
     }
 
     /**
      * Инициализирует объект.
      *
-     * Получает доступ к DOM-элементам, устанавливает заголовок и подписывается на событие при выборе ответа.
+     * Получает доступ к DOM-элементам, устанавливает заголовок и подписывается на события.
      */
     init() {
+        this.handleAnswerButtonClick = this.handleAnswerButtonClick.bind(this);
+
         this.questionElement = document.querySelector('#question');
         this.answersContainer = document.querySelector('#answers');
         this.progressElement = document.querySelector('#progress');
@@ -41,18 +41,15 @@ export default class App {
      * @param {Event} event
      */
     handleAnswerButtonClick(event) {
-        let selectedAnswer = event.target.textContent;
+        let selectedAnswer = event.target.id;
 
-        if (this.quiz.checkAnswer(selectedAnswer)) {
-            this.quiz.incrementScore();
-        }
+        this.quiz.checkAnswer(selectedAnswer);
 
-        this.quiz.nextQuestion();
         this.displayNext();
     }
 
     /**
-     * Отображает следующий вопрос или отображает результат если тест заверешен.
+     * Отображает следующий вопрос или результат, если тест заверешен.
      */
     displayNext() {
         if (!this.quiz.hasEnded) {
@@ -79,21 +76,14 @@ export default class App {
      * Отображает ответы.
      */
     displayAnswers() {
-        while (this.answersContainer.firstChild) {
-            this.answersContainer.removeChild(this.answersContainer.firstChild);
-        }
+        let answers = this.quiz.currentQuestion.answers;
+        let html = '';
 
-        this.quiz.currentQuestion.answers.forEach(answer => {
-            let answerElement = document.createElement('li');
-
-            answerElement.classList.add(
-                'list-group-item',
-                'list-group-item-action'
-            );
-            answerElement.textContent = answer;
-
-            this.answersContainer.appendChild(answerElement);
+        answers.forEach((answer, index) => {
+            html += `<li id="${index}" class="list-group-item list-group-item-action">${answer}</li>`;
         });
+
+        this.answersContainer.innerHTML = html;
     }
 
     /**
@@ -108,6 +98,11 @@ export default class App {
      * Отображает результат теста.
      */
     displayScore() {
-        this.scoreElement.textContent = `Правильных ответов: ${this.quiz.score}`;
+        this.scoreElement.textContent = `Правильных ответов: ${
+            this.quiz.score
+        }`;
+
+        this.questionElement.textContent = '';
+        this.answersContainer.innerHTML = `<h2 class="text-center">Тест завершен!</h2>`;
     }
 }
