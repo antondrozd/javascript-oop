@@ -2,7 +2,7 @@ export function createAnswersRenderer(type, answers) {
     if (type === 'single' || type === 'multiple') {
         return new OptionalAnswersRenderer(answers);
     } else if (type === 'open') {
-        return new OpenAnswerRenderer(answers);
+        return new OpenAnswerRenderer();
     }
 }
 
@@ -23,12 +23,8 @@ class OptionalAnswersRenderer {
 }
 
 class OpenAnswerRenderer {
-    constructor(answers) {
-        this.answers = answers;
-    }
-
     getHTML() {
-        let html = `<input id="open-answer" type="text">`;
+        let html = `<li class="list-group-item"><input id="open-answer" type="text" class="form-control"></li>`;
 
         return html;
     }

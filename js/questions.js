@@ -35,6 +35,6 @@ export class OpenAnswerQuestion extends Question {
      * @returns {boolean}
      */
     isCorrectAnswer(answer) {
-        return answer.trim() === this.correctAnswer;
+        return answer === this.correctAnswer;
     }
 }

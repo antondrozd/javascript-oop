@@ -45,13 +45,13 @@ const questions = [
             'Что будет результатом выражения?<br><br>new Boolean(new Boolean(false)).valueOf()',
         answers: ['true', 'false', '"true"', '"false"', 'undefined'],
         correctAnswer: 0
+    },
+    {
+        type: 'open',
+        text:
+            'Как называется совокупность функции и лексичесокй среды в который функция была объявлена?',
+        correctAnswer: 'Замыкание'
     }
-    // {
-    //     type: 'open',
-    //     text:
-    //         'Как называется совокупность функции и лексичесокй среды в который функция была объявлена?',
-    //     correctAnswer: 'Замыкание'
-    // }
 ];
 
 const root = document.querySelector('#app');

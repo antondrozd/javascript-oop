@@ -10,6 +10,7 @@ export default class App {
         this.answersElement;
         this.progressElement;
         this.scoreElement;
+        this.openAnswerInputElement;
 
         this.init();
     }
@@ -21,6 +22,7 @@ export default class App {
      */
     init() {
         this.handleAnswerOptionClick = this.handleAnswerOptionClick.bind(this);
+        this.handleOpenAnswerChange = this.handleOpenAnswerChange.bind(this);
         this.handleConfirmButtonClick = this.handleConfirmButtonClick.bind(
             this
         );
@@ -46,7 +48,7 @@ export default class App {
     /**
      * Обрабатывает событие при выборе ответа.
      *
-     * @param {Event} event
+     * @param {Event}
      */
     handleAnswerOptionClick({ target }) {
         let answerElement = target;
@@ -59,19 +61,32 @@ export default class App {
     }
 
     /**
+     * Обрабатывает событие при изменении значения поля ввода для открытого ответа.
+     * 
+     * @param {Event}
+     */
+    handleOpenAnswerChange({ target }) {
+        let answer = target.value;
+
+        this.quiz.changeOpenAnswer(answer);
+    }
+
+    /**
      * Обрабатывает событие подтверждения выбранного ответа.
      */
     handleConfirmButtonClick() {
-        this.quiz.checkAnswer();
+        if (this.quiz.selectedAnswers.length) {
+            this.quiz.checkAnswer();
 
-        this.displayNext();
+            this.displayNext();
+        }
     }
 
     /**
      * Обрабатывает выбор одного ответа
-     * 
-     * @param {*} answer 
-     * @param {HTMLElement} answerElement 
+     *
+     * @param {*} answer
+     * @param {HTMLElement} answerElement
      */
     singleAnswerSelectHandler(answer, answerElement) {
         this.answersContainer.childNodes.forEach(element =>
@@ -85,9 +100,9 @@ export default class App {
 
     /**
      * Обрабатывает выбор нескольких ответов
-     * 
-     * @param {*} answer 
-     * @param {HTMLElement} answerElement 
+     *
+     * @param {*} answer
+     * @param {HTMLElement} answerElement
      */
     multipleAnswersSelectHandler(answer, answerElement) {
         if (!this.quiz.isAnswerSelected(answer)) {
@@ -100,7 +115,7 @@ export default class App {
     }
 
     /**
-     * Отображает следующий вопрос или результат, если тест заверешен.
+     * Отображает следующий вопрос. Если тест заверешен - отображает результат и отписывается от событий.
      */
     displayNext() {
         if (!this.quiz.hasEnded) {
@@ -116,6 +131,11 @@ export default class App {
             this.confirmBtnElement.removeEventListener(
                 'click',
                 this.handleConfirmButtonClick
+            );
+
+            this.openAnswerInputElement.removeEventListener(
+                'change',
+                this.handleOpenAnswerChange
             );
 
             this.displayScore();
@@ -136,10 +156,29 @@ export default class App {
         let html = this.quiz.currentQuestion.answersRenderer.getHTML();
 
         this.answersContainer.innerHTML = html;
+
+        if (this.quiz.currentQuestionType === 'open')
+            this.subscribeOpenAnswerInputChange();
     }
 
     /**
-     * Выделяет (снимает выделение) выбранный ответ визуально.
+     * Подписывается на событие change у поля развернутого ответа.
+     */
+    subscribeOpenAnswerInputChange() {
+        if (this.quiz.currentQuestionType === 'open') {
+            this.openAnswerInputElement = this.answersContainer.querySelector(
+                '#open-answer'
+            );
+
+            this.openAnswerInputElement.addEventListener(
+                'change',
+                this.handleOpenAnswerChange
+            );
+        }
+    }
+
+    /**
+     * Выделяет (или снимает выделение) выбранный ответ визуально.
      */
     displaySelected(answer) {
         answer.classList.toggle('active');

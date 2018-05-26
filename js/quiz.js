@@ -20,12 +20,17 @@ export default class Quiz {
         return this.questions[this._questionIndex];
     }
 
+    /**
+     * Возвращает тип текущего вопроса.
+     * 
+     * @returns {string}
+     */
     get currentQuestionType() {
         return this.currentQuestion.type;
     }
 
     /**
-     * Возвращает `true/false` в зависимости от того закончился тест или нет.
+     * Возвращает `true/false` в зависимости от того, закончился тест или нет.
      *
      * @returns {boolean}
      */
@@ -52,7 +57,16 @@ export default class Quiz {
     }
 
     /**
-     * Проверяет правильность ответа выбранного пользователем.
+     * Возвращает выбранный ответ
+     * 
+     * @returns {*}
+     */
+    get selectedAnswers() {
+        return this._selectedAnswers;
+    }
+
+    /**
+     * Проверяет правильность ответа, выбранного пользователем.
      */
     checkAnswer() {
         if (this.currentQuestion.isCorrectAnswer(this._selectedAnswers)) {
@@ -98,12 +112,21 @@ export default class Quiz {
     }
 
     /**
-     * Очищает массив выбранных ответов и добавляет ответ, выбранный в данный момент.
+     * Очищает массив выбранных ответов и добавляет текущий выбранный ответ.
      *
      * @param {*} answer
      */
     selectSingleAnswer(answer) {
         this._selectedAnswers = [answer];
+    }
+
+    /**
+     * Переопределяет массив выбранных ответов на строку введенного ответа.
+     * 
+     * @param {string} answer 
+     */
+    changeOpenAnswer(answer) {
+        this._selectedAnswers = answer;
     }
 
     /**
