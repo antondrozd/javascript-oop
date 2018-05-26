@@ -20,6 +20,10 @@ export default class Quiz {
         return this.questions[this._questionIndex];
     }
 
+    get currentQuestionType() {
+        return this.currentQuestion.type;
+    }
+
     /**
      * Возвращает `true/false` в зависимости от того закончился тест или нет.
      *
@@ -63,6 +67,7 @@ export default class Quiz {
      */
     toNextQuestion() {
         this._questionIndex += 1;
+        this._selectedAnswers = [];
     }
 
     /**
@@ -90,6 +95,15 @@ export default class Quiz {
         let answerIndex = this._selectedAnswers.indexOf(answer);
 
         this._selectedAnswers.splice(answerIndex, 1);
+    }
+
+    /**
+     * Очищает массив выбранных ответов и добавляет ответ, выбранный в данный момент.
+     *
+     * @param {*} answer
+     */
+    selectSingleAnswer(answer) {
+        this._selectedAnswers = [answer];
     }
 
     /**

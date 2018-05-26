@@ -1,8 +1,9 @@
 import App from './app.js';
 import Quiz from './quiz.js';
+
 import {
     SingleAnswerQuestion,
-    MultipleAnswerQuestion,
+    MultipleAnswersQuestion,
     OpenAnswerQuestion
 } from './questions.js';
 
@@ -44,18 +45,18 @@ const questions = [
             'Что будет результатом выражения?<br><br>new Boolean(new Boolean(false)).valueOf()',
         answers: ['true', 'false', '"true"', '"false"', 'undefined'],
         correctAnswer: 0
-    },
-    {
-        type: 'open',
-        text:
-            'Как называется совокупность функции и лексичесокй среды в который функция была объявлена?',
-        correctAnswer: 'Замыкание'
     }
+    // {
+    //     type: 'open',
+    //     text:
+    //         'Как называется совокупность функции и лексичесокй среды в который функция была объявлена?',
+    //     correctAnswer: 'Замыкание'
+    // }
 ];
 
 const root = document.querySelector('#app');
 
-const quiz = new Quiz(
+window.quiz = new Quiz(
     'JS Quiz',
     questions.map(({ type, text, answers, correctAnswer }) => {
         let props = {
@@ -69,7 +70,7 @@ const quiz = new Quiz(
             case 'single':
                 return new SingleAnswerQuestion(props);
             case 'multiple':
-                return new MultipleAnswerQuestion(props);
+                return new MultipleAnswersQuestion(props);
             case 'open':
                 return new OpenAnswerQuestion(props);
         }

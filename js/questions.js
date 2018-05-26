@@ -11,7 +11,7 @@ export class SingleAnswerQuestion extends Question {
     }
 }
 
-export class MultipleAnswerQuestion extends Question {
+export class MultipleAnswersQuestion extends Question {
     /**
      * Проверяет правильность ответа
      * 
@@ -21,7 +21,7 @@ export class MultipleAnswerQuestion extends Question {
         if (answer.length !== this.correctAnswer.length) return false;
 
         for (let i = 0; i < answer.length; i++) {
-            if (this.correctAnswer.indexOf(answer[i]) === -1) return false;
+            if (this.correctAnswer.indexOf(+answer[i]) === -1) return false;
         }
 
         return true;

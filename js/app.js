@@ -21,7 +21,9 @@ export default class App {
      */
     init() {
         this.handleAnswerOptionClick = this.handleAnswerOptionClick.bind(this);
-        this.handleConfirmButtonClick = this.handleConfirmButtonClick.bind(this);
+        this.handleConfirmButtonClick = this.handleConfirmButtonClick.bind(
+            this
+        );
 
         this.questionElement = document.querySelector('#question');
         this.answersContainer = document.querySelector('#answers');
@@ -46,14 +48,14 @@ export default class App {
      *
      * @param {Event} event
      */
-    handleAnswerOptionClick(event) {
-        let answer = event.target.id;
+    handleAnswerOptionClick({ target }) {
+        let answerElement = target;
+        let answer = target.id;
 
-        if (!this.quiz.isAnswerSelected(answer)) {
-            this.quiz.selectAnswer(answer);
-        } else {
-            this.quiz.deselectAnswer(answer);
-        }
+        if (this.quiz.currentQuestionType === 'multiple')
+            this.multipleAnswersSelectHandler(answer, answerElement);
+        if (this.quiz.currentQuestionType === 'single')
+            this.singleAnswerSelectHandler(answer, answerElement);
     }
 
     /**
@@ -63,6 +65,38 @@ export default class App {
         this.quiz.checkAnswer();
 
         this.displayNext();
+    }
+
+    /**
+     * Обрабатывает выбор одного ответа
+     * 
+     * @param {*} answer 
+     * @param {HTMLElement} answerElement 
+     */
+    singleAnswerSelectHandler(answer, answerElement) {
+        this.answersContainer.childNodes.forEach(element =>
+            element.classList.remove('active')
+        );
+
+        this.quiz.selectSingleAnswer(answer);
+
+        answerElement.classList.add('active');
+    }
+
+    /**
+     * Обрабатывает выбор нескольких ответов
+     * 
+     * @param {*} answer 
+     * @param {HTMLElement} answerElement 
+     */
+    multipleAnswersSelectHandler(answer, answerElement) {
+        if (!this.quiz.isAnswerSelected(answer)) {
+            this.quiz.selectAnswer(answer);
+        } else {
+            this.quiz.deselectAnswer(answer);
+        }
+
+        this.displaySelected(answerElement);
     }
 
     /**
@@ -105,6 +139,13 @@ export default class App {
     }
 
     /**
+     * Выделяет (снимает выделение) выбранный ответ визуально.
+     */
+    displaySelected(answer) {
+        answer.classList.toggle('active');
+    }
+
+    /**
      * Отображает прогресс ('Вопрос 1 из 5').
      */
     displayProgress() {
@@ -122,5 +163,6 @@ export default class App {
 
         this.questionElement.textContent = '';
         this.answersContainer.innerHTML = `<h2 class="text-center">Тест завершен!</h2>`;
+        this.confirmBtnElement.remove();
     }
 }

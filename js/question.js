@@ -8,6 +8,7 @@ export default class Question {
      * @param {*} correctAnswer Правильный ответ
      */
     constructor({ type, text = '', answers = [], correctAnswer }) {
+        this.type = type;
         this.text = text;
         this.answers = answers;
         this.correctAnswer = correctAnswer;
