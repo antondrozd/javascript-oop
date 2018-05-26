@@ -20,18 +20,24 @@ export default class App {
      * Получает доступ к DOM-элементам, устанавливает заголовок и подписывается на события.
      */
     init() {
-        this.handleAnswerButtonClick = this.handleAnswerButtonClick.bind(this);
+        this.handleAnswerOptionClick = this.handleAnswerOptionClick.bind(this);
+        this.handleConfirmButtonClick = this.handleConfirmButtonClick.bind(this);
 
         this.questionElement = document.querySelector('#question');
         this.answersContainer = document.querySelector('#answers');
         this.progressElement = document.querySelector('#progress');
+        this.confirmBtnElement = document.querySelector('#confirm');
         this.scoreElement = document.querySelector('#score');
 
         document.querySelector('#title').textContent = this.quiz.title;
 
         this.answersContainer.addEventListener(
             'click',
-            this.handleAnswerButtonClick
+            this.handleAnswerOptionClick
+        );
+        this.confirmBtnElement.addEventListener(
+            'click',
+            this.handleConfirmButtonClick
         );
     }
 
@@ -40,10 +46,21 @@ export default class App {
      *
      * @param {Event} event
      */
-    handleAnswerButtonClick(event) {
-        let selectedAnswer = event.target.id;
+    handleAnswerOptionClick(event) {
+        let answer = event.target.id;
 
-        this.quiz.checkAnswer(selectedAnswer);
+        if (!this.quiz.isAnswerSelected(answer)) {
+            this.quiz.selectAnswer(answer);
+        } else {
+            this.quiz.deselectAnswer(answer);
+        }
+    }
+
+    /**
+     * Обрабатывает событие подтверждения выбранного ответа.
+     */
+    handleConfirmButtonClick() {
+        this.quiz.checkAnswer();
 
         this.displayNext();
     }
@@ -59,8 +76,14 @@ export default class App {
         } else {
             this.answersContainer.removeEventListener(
                 'click',
-                this.handleAnswerButtonClick
+                this.handleAnswerOptionClick
             );
+
+            this.confirmBtnElement.removeEventListener(
+                'click',
+                this.handleConfirmButtonClick
+            );
+
             this.displayScore();
         }
     }
@@ -76,12 +99,7 @@ export default class App {
      * Отображает ответы.
      */
     displayAnswers() {
-        let answers = this.quiz.currentQuestion.answers;
-        let html = '';
-
-        answers.forEach((answer, index) => {
-            html += `<li id="${index}" class="list-group-item list-group-item-action">${answer}</li>`;
-        });
+        let html = this.quiz.currentQuestion.answersRenderer.getHTML();
 
         this.answersContainer.innerHTML = html;
     }

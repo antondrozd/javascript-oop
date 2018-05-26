@@ -6,6 +6,7 @@ export default class Quiz {
     constructor(title = '', questions = []) {
         this.title = title;
         this.questions = questions;
+        this._selectedAnswers = [];
         this._questionIndex = 0;
         this._score = 0;
     }
@@ -48,11 +49,9 @@ export default class Quiz {
 
     /**
      * Проверяет правильность ответа выбранного пользователем.
-     *
-     * @param {*} answer
      */
-    checkAnswer(answer) {
-        if (this.currentQuestion.isCorrectAnswer(answer)) {
+    checkAnswer() {
+        if (this.currentQuestion.isCorrectAnswer(this._selectedAnswers)) {
             this.incrementScore();
         }
 
@@ -71,5 +70,39 @@ export default class Quiz {
      */
     incrementScore() {
         this._score += 1;
+    }
+
+    /**
+     * Добавляет ответ в массив выбранных ответов.
+     *
+     * @param {*} answer
+     */
+    selectAnswer(answer) {
+        this._selectedAnswers.push(answer);
+    }
+
+    /**
+     * Удаляет ответ из массива выбранных ответов.
+     *
+     * @param {*} answer
+     */
+    deselectAnswer(answer) {
+        let answerIndex = this._selectedAnswers.indexOf(answer);
+
+        this._selectedAnswers.splice(answerIndex, 1);
+    }
+
+    /**
+     * Проверяет, выбран ли уже данный ответ.
+     *
+     * @param {*} answer
+     * @returns {boolean}
+     */
+    isAnswerSelected(answer) {
+        if (this._selectedAnswers.indexOf(answer) === -1) {
+            return false;
+        }
+
+        return true;
     }
 }
