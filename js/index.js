@@ -56,7 +56,7 @@ const questions = [
 
 const root = document.querySelector('#app');
 
-window.quiz = new Quiz(
+const quiz = new Quiz(
     'JS Quiz',
     questions.map(({ type, text, answers, correctAnswer }) => {
         let props = {
