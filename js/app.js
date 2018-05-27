@@ -62,7 +62,7 @@ export default class App {
 
     /**
      * Обрабатывает событие при изменении значения поля ввода для открытого ответа.
-     * 
+     *
      * @param {Event}
      */
     handleOpenAnswerChange({ target }) {
@@ -201,7 +201,7 @@ export default class App {
         }`;
 
         this.questionElement.textContent = '';
-        this.answersContainer.innerHTML = `<h2 class="text-center">Тест завершен!</h2>`;
+        this.answersContainer.innerHTML = `<li class="list-group-item"><h2 class="text-center">Тест завершен!</h2></li>`;
         this.confirmBtnElement.remove();
     }
 }
