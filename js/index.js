@@ -1,11 +1,7 @@
 import App from './app.js';
 import Quiz from './quiz.js';
 
-import {
-    SingleAnswerQuestion,
-    MultipleAnswersQuestion,
-    OpenAnswerQuestion
-} from './questions.js';
+import { createQuestion } from './questions.js';
 
 const questions = [
     {
@@ -58,23 +54,7 @@ const root = document.querySelector('#app');
 
 const quiz = new Quiz(
     'JS Quiz',
-    questions.map(({ type, text, answers, correctAnswer }) => {
-        let props = {
-            type,
-            text,
-            answers,
-            correctAnswer
-        };
-
-        switch (type) {
-            case 'single':
-                return new SingleAnswerQuestion(props);
-            case 'multiple':
-                return new MultipleAnswersQuestion(props);
-            case 'open':
-                return new OpenAnswerQuestion(props);
-        }
-    })
+    questions.map(question => createQuestion(question))
 );
 
 const app = new App(root, quiz);

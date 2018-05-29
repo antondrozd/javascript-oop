@@ -1,6 +1,6 @@
 import Question from './question.js';
 
-export class SingleAnswerQuestion extends Question {
+class SingleAnswerQuestion extends Question {
     /**
      * Проверяет правильность ответа
      * 
@@ -11,7 +11,7 @@ export class SingleAnswerQuestion extends Question {
     }
 }
 
-export class MultipleAnswersQuestion extends Question {
+class MultipleAnswersQuestion extends Question {
     /**
      * Проверяет правильность ответа
      * 
@@ -28,7 +28,7 @@ export class MultipleAnswersQuestion extends Question {
     }
 }
 
-export class OpenAnswerQuestion extends Question {
+class OpenAnswerQuestion extends Question {
     /**
      * Проверяет правильность ответа
      * 
@@ -36,5 +36,23 @@ export class OpenAnswerQuestion extends Question {
      */
     isCorrectAnswer(answer) {
         return answer === this.correctAnswer;
+    }
+}
+
+export function createQuestion({ type, text, answers, correctAnswer }) {
+    let props = {
+        type,
+        text,
+        answers,
+        correctAnswer
+    };
+
+    switch (type) {
+        case 'single':
+            return new SingleAnswerQuestion(props);
+        case 'multiple':
+            return new MultipleAnswersQuestion(props);
+        case 'open':
+            return new OpenAnswerQuestion(props);
     }
 }
