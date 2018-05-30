@@ -1,6 +1,7 @@
 export default class App {
-    constructor({ canvas }) {
+    constructor({ canvas, colorPalette }) {
         this.canvas = canvas;
+        this.colorPalette = colorPalette;
 
         this.clearCanvasButton;
         this.brushSizeSlider;
@@ -10,6 +11,7 @@ export default class App {
 
         this.handleCanvasClear = this.handleCanvasClear.bind(this);
         this.handleBrushSizeChange = this.handleBrushSizeChange.bind(this);
+        this.handleBrushColorChange = this.handleBrushColorChange.bind(this);
 
         this.init();
     }
@@ -20,13 +22,34 @@ export default class App {
         this.clearCanvasButton = document.querySelector('#clear-canvas-button');
         this.brushSizeSlider = document.querySelector('#brush-size-slider');
 
-        this.clearCanvasButton.addEventListener('click', this.handleCanvasClear);
-        this.brushSizeSlider.addEventListener('change', this.handleBrushSizeChange);
+        this.clearCanvasButton.addEventListener(
+            'click',
+            this.handleCanvasClear
+        );
+        this.brushSizeSlider.addEventListener(
+            'change',
+            this.handleBrushSizeChange
+        );
 
-        this.canvas.addEventListener('mousedown', this.handleCanvasMousedown.bind(this));
-        this.canvas.addEventListener('mousemove', this.handleCanvasMousemove.bind(this));
-        this.canvas.addEventListener('mouseup', this.handleCanvasMouseup.bind(this));
-        this.canvas.addEventListener('mouseleave', this.handleCanvasMouseleave.bind(this));
+        this.canvas.addEventListener(
+            'mousedown',
+            this.handleCanvasMousedown.bind(this)
+        );
+        this.canvas.addEventListener(
+            'mousemove',
+            this.handleCanvasMousemove.bind(this)
+        );
+        this.canvas.addEventListener(
+            'mouseup',
+            this.handleCanvasMouseup.bind(this)
+        );
+        this.canvas.addEventListener(
+            'mouseleave',
+            this.handleCanvasMouseleave.bind(this)
+        );
+
+        this.colorPalette.render();
+        this.colorPalette.subscribe(this.handleBrushColorChange);
     }
 
     handleCanvasMousedown(event) {
@@ -39,7 +62,6 @@ export default class App {
             this.context.beginPath();
             this.context.moveTo(this.lastEvent.offsetX, this.lastEvent.offsetY);
             this.context.lineTo(event.offsetX, event.offsetY);
-            this.context.strokeStyle = 'black';
             this.context.stroke();
             this.lastEvent = event;
         }
@@ -60,5 +82,18 @@ export default class App {
 
     handleBrushSizeChange(event) {
         this.context.lineWidth = Number(event.target.value);
+    }
+
+    handleBrushColorChange(event) {
+        const element = event.target;
+        const color = event.target.style.backgroundColor;
+
+        this.context.strokeStyle = color;
+
+        this.colorPalette.element.childNodes.forEach(color =>
+            color.classList.remove('selected')
+        );
+        
+        element.classList.add('selected');
     }
 }
