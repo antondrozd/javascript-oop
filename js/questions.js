@@ -3,7 +3,8 @@ import Question from './question.js';
 class SingleAnswerQuestion extends Question {
     /**
      * Проверяет правильность ответа
-     * 
+     *
+     * @param {number[]} answer
      * @returns {boolean}
      */
     isCorrectAnswer(answer) {
@@ -14,7 +15,8 @@ class SingleAnswerQuestion extends Question {
 class MultipleAnswersQuestion extends Question {
     /**
      * Проверяет правильность ответа
-     * 
+     *
+     * @param {number[]} answer
      * @returns {boolean}
      */
     isCorrectAnswer(answer) {
@@ -31,11 +33,17 @@ class MultipleAnswersQuestion extends Question {
 class OpenAnswerQuestion extends Question {
     /**
      * Проверяет правильность ответа
-     * 
+     *
+     * @param {string[]} answer
      * @returns {boolean}
      */
     isCorrectAnswer(answer) {
-        return answer === this.correctAnswer;
+        return (
+            answer
+                .toString()
+                .toLowerCase()
+                .trim() === this.correctAnswer.toLowerCase().trim()
+        );
     }
 }
 

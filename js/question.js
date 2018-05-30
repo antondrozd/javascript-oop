@@ -1,4 +1,4 @@
-import { createAnswersRenderer } from './answers-renderer.js';
+import { createAnswersRenderer } from './answers-renderers.js';
 
 export default class Question {
     /**
@@ -12,6 +12,6 @@ export default class Question {
         this.text = text;
         this.answers = answers;
         this.correctAnswer = correctAnswer;
-        this.answersRenderer = createAnswersRenderer(type, this.answers);
+        this.answersRenderer = createAnswersRenderer(type, answers);
     }
 }
