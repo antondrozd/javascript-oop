@@ -9,6 +9,17 @@ export default class Quiz {
         this._selectedAnswers = [];
         this._questionIndex = 0;
         this._score = 0;
+
+        this.onAnswer = this.onAnswer.bind(this);
+    }
+
+    /**
+     * Возвращает общее количество вопросов.
+     * 
+     * @returns {number}
+     */
+    get questionsNumber() {
+        return this.questions.length;
     }
 
     /**
@@ -22,7 +33,7 @@ export default class Quiz {
 
     /**
      * Возвращает тип текущего вопроса.
-     * 
+     *
      * @returns {string}
      */
     get currentQuestionType() {
@@ -30,7 +41,7 @@ export default class Quiz {
     }
 
     /**
-     * Возвращает `true/false` в зависимости от того, закончился тест или нет.
+     * Возвращает true/false в зависимости от того, закончился тест или нет.
      *
      * @returns {boolean}
      */
@@ -58,7 +69,7 @@ export default class Quiz {
 
     /**
      * Возвращает выбранный ответ
-     * 
+     *
      * @returns {*}
      */
     get selectedAnswers() {
@@ -66,10 +77,19 @@ export default class Quiz {
     }
 
     /**
+     * Возвращает true/false в зависимости от того, выбран ли ответ.
+     * 
+     * @returns {boolean}
+     */
+    get isSomeAnswerSelected() {
+        return Boolean(this.selectedAnswers.length);
+    }
+
+    /**
      * Проверяет правильность ответа, выбранного пользователем.
      */
     checkAnswer() {
-        if (this.currentQuestion.isCorrectAnswer(this._selectedAnswers)) {
+        if (this.currentQuestion.isCorrectAnswer(this.selectedAnswers)) {
             this.incrementScore();
         }
 
@@ -89,6 +109,29 @@ export default class Quiz {
      */
     incrementScore() {
         this._score += 1;
+    }
+
+    /**
+     * Обрабатывает выбор ответа.
+     * 
+     * @param {*} answer 
+     */
+    onAnswer(answer) {
+        switch (this.currentQuestionType) {
+            case 'single':
+                this.selectSingleAnswer(answer);
+                break;
+            case 'multiple':
+                if (!this.isAnswerSelected(answer)) {
+                    this.selectAnswer(answer);
+                } else {
+                    this.deselectAnswer(answer);
+                }
+                break;
+            case 'open':
+                this.changeOpenAnswer(answer);
+                break;
+        }
     }
 
     /**
@@ -121,16 +164,16 @@ export default class Quiz {
     }
 
     /**
-     * Переопределяет массив выбранных ответов на строку введенного ответа.
-     * 
-     * @param {string} answer 
+     * Очищает массив выбранных ответов и добавляет текущий введенный ответ.
+     *
+     * @param {string} answer
      */
     changeOpenAnswer(answer) {
-        this._selectedAnswers = answer;
+        this._selectedAnswers = [answer];
     }
 
     /**
-     * Проверяет, выбран ли уже данный ответ.
+     * Проверяет, выбран ли уже переданный ответ.
      *
      * @param {*} answer
      * @returns {boolean}

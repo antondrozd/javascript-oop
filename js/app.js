@@ -7,10 +7,12 @@ export default class App {
         this.element = element;
         this.quiz = quiz;
         this.questionElement;
-        this.answersElement;
         this.progressElement;
         this.scoreElement;
-        this.openAnswerInputElement;
+
+        this.handleConfirmButtonClick = this.handleConfirmButtonClick.bind(
+            this
+        );
 
         this.init();
     }
@@ -18,15 +20,9 @@ export default class App {
     /**
      * Инициализирует объект.
      *
-     * Получает доступ к DOM-элементам, устанавливает заголовок и подписывается на события.
+     * Получает доступ к DOM-элементам, устанавливает заголовок и подписывается на событие выбора ответа.
      */
     init() {
-        this.handleAnswerOptionClick = this.handleAnswerOptionClick.bind(this);
-        this.handleOpenAnswerChange = this.handleOpenAnswerChange.bind(this);
-        this.handleConfirmButtonClick = this.handleConfirmButtonClick.bind(
-            this
-        );
-
         this.questionElement = document.querySelector('#question');
         this.answersContainer = document.querySelector('#answers');
         this.progressElement = document.querySelector('#progress');
@@ -35,10 +31,6 @@ export default class App {
 
         document.querySelector('#title').textContent = this.quiz.title;
 
-        this.answersContainer.addEventListener(
-            'click',
-            this.handleAnswerOptionClick
-        );
         this.confirmBtnElement.addEventListener(
             'click',
             this.handleConfirmButtonClick
@@ -46,72 +38,14 @@ export default class App {
     }
 
     /**
-     * Обрабатывает событие при выборе ответа.
-     *
-     * @param {Event}
-     */
-    handleAnswerOptionClick({ target }) {
-        let answerElement = target;
-        let answer = target.id;
-
-        if (this.quiz.currentQuestionType === 'multiple')
-            this.multipleAnswersSelectHandler(answer, answerElement);
-        if (this.quiz.currentQuestionType === 'single')
-            this.singleAnswerSelectHandler(answer, answerElement);
-    }
-
-    /**
-     * Обрабатывает событие при изменении значения поля ввода для открытого ответа.
-     *
-     * @param {Event}
-     */
-    handleOpenAnswerChange({ target }) {
-        let answer = target.value;
-
-        this.quiz.changeOpenAnswer(answer);
-    }
-
-    /**
      * Обрабатывает событие подтверждения выбранного ответа.
      */
     handleConfirmButtonClick() {
-        if (this.quiz.selectedAnswers.length) {
+        if (this.quiz.isSomeAnswerSelected) {
             this.quiz.checkAnswer();
 
             this.displayNext();
         }
-    }
-
-    /**
-     * Обрабатывает выбор одного ответа
-     *
-     * @param {*} answer
-     * @param {HTMLElement} answerElement
-     */
-    singleAnswerSelectHandler(answer, answerElement) {
-        this.answersContainer.childNodes.forEach(element =>
-            element.classList.remove('active')
-        );
-
-        this.quiz.selectSingleAnswer(answer);
-
-        answerElement.classList.add('active');
-    }
-
-    /**
-     * Обрабатывает выбор нескольких ответов
-     *
-     * @param {*} answer
-     * @param {HTMLElement} answerElement
-     */
-    multipleAnswersSelectHandler(answer, answerElement) {
-        if (!this.quiz.isAnswerSelected(answer)) {
-            this.quiz.selectAnswer(answer);
-        } else {
-            this.quiz.deselectAnswer(answer);
-        }
-
-        this.displaySelected(answerElement);
     }
 
     /**
@@ -123,21 +57,6 @@ export default class App {
             this.displayAnswers();
             this.displayProgress();
         } else {
-            this.answersContainer.removeEventListener(
-                'click',
-                this.handleAnswerOptionClick
-            );
-
-            this.confirmBtnElement.removeEventListener(
-                'click',
-                this.handleConfirmButtonClick
-            );
-
-            this.openAnswerInputElement.removeEventListener(
-                'change',
-                this.handleOpenAnswerChange
-            );
-
             this.displayScore();
         }
     }
@@ -153,35 +72,15 @@ export default class App {
      * Отображает ответы.
      */
     displayAnswers() {
-        let html = this.quiz.currentQuestion.answersRenderer.getHTML();
+        this.answersContainer.innerHTML = '';
 
-        this.answersContainer.innerHTML = html;
+        let elements = this.quiz.currentQuestion.answersRenderer.render(
+            this.quiz.onAnswer
+        );
 
-        if (this.quiz.currentQuestionType === 'open')
-            this.subscribeOpenAnswerInputChange();
-    }
-
-    /**
-     * Подписывается на событие change у поля развернутого ответа.
-     */
-    subscribeOpenAnswerInputChange() {
-        if (this.quiz.currentQuestionType === 'open') {
-            this.openAnswerInputElement = this.answersContainer.querySelector(
-                '#open-answer'
-            );
-
-            this.openAnswerInputElement.addEventListener(
-                'change',
-                this.handleOpenAnswerChange
-            );
-        }
-    }
-
-    /**
-     * Выделяет (или снимает выделение) выбранный ответ визуально.
-     */
-    displaySelected(answer) {
-        answer.classList.toggle('active');
+        elements.forEach(element => {
+            this.answersContainer.appendChild(element);
+        });
     }
 
     /**
@@ -189,7 +88,7 @@ export default class App {
      */
     displayProgress() {
         this.progressElement.textContent = `Вопрос ${this.quiz.questionIndex +
-            1} из ${this.quiz.questions.length}`;
+            1} из ${this.quiz.questionsNumber}`;
     }
 
     /**
