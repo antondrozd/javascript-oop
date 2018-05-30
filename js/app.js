@@ -2,14 +2,26 @@ export default class App {
     constructor({ canvas }) {
         this.canvas = canvas;
 
+        this.clearCanvasButton;
+        this.brushSizeSlider;
+
         this.context = null;
         this.isDrawing = false;
+
+        this.handleCanvasClear = this.handleCanvasClear.bind(this);
+        this.handleBrushSizeChange = this.handleBrushSizeChange.bind(this);
 
         this.init();
     }
 
     init() {
         this.context = this.canvas.getContext('2d');
+
+        this.clearCanvasButton = document.querySelector('#clear-canvas-button');
+        this.brushSizeSlider = document.querySelector('#brush-size-slider');
+
+        this.clearCanvasButton.addEventListener('click', this.handleCanvasClear);
+        this.brushSizeSlider.addEventListener('change', this.handleBrushSizeChange);
 
         this.canvas.addEventListener('mousedown', this.handleCanvasMousedown.bind(this));
         this.canvas.addEventListener('mousemove', this.handleCanvasMousemove.bind(this));
