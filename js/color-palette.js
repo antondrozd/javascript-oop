@@ -2,6 +2,11 @@ export default class ColorPalette {
     constructor({ element, colors }) {
         this.element = element;
         this.colors = colors;
+        this._currentColor = 'black';
+    }
+
+    get currentColor() {
+        return this._currentColor;
     }
 
     render() {
@@ -15,9 +20,28 @@ export default class ColorPalette {
         );
 
         this.element.innerHTML = html;
+
+        this.element.addEventListener(
+            'click',
+            this.handleBrushColorChange.bind(this)
+        );
     }
 
-    subscribe(onColorChange) {
-        this.element.addEventListener('click', onColorChange);
+    handleBrushColorChange({ target }) {
+        if (target.tagName !== 'LI') return;
+
+        const colorElement = target;
+
+        this._currentColor = colorElement.style.backgroundColor;
+
+        this.displaySelected(colorElement);
+    }
+
+    displaySelected(colorElement) {
+        this.element.childNodes.forEach(color =>
+            color.classList.remove('selected')
+        );
+
+        colorElement.classList.add('selected');
     }
 }

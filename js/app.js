@@ -11,7 +11,6 @@ export default class App {
 
         this.handleCanvasClear = this.handleCanvasClear.bind(this);
         this.handleBrushSizeChange = this.handleBrushSizeChange.bind(this);
-        this.handleBrushColorChange = this.handleBrushColorChange.bind(this);
 
         this.init();
     }
@@ -48,8 +47,7 @@ export default class App {
             this.handleCanvasMouseleave.bind(this)
         );
 
-        this.colorPalette.render();
-        this.colorPalette.subscribe(this.handleBrushColorChange);
+        this.displayPalette();
     }
 
     handleCanvasMousedown(event) {
@@ -61,6 +59,7 @@ export default class App {
         if (this.isDrawing) {
             this.context.beginPath();
             this.context.moveTo(this.lastEvent.offsetX, this.lastEvent.offsetY);
+            this.context.strokeStyle = this.colorPalette.currentColor;
             this.context.lineTo(event.offsetX, event.offsetY);
             this.context.stroke();
             this.lastEvent = event;
@@ -84,16 +83,7 @@ export default class App {
         this.context.lineWidth = Number(event.target.value);
     }
 
-    handleBrushColorChange(event) {
-        const element = event.target;
-        const color = event.target.style.backgroundColor;
-
-        this.context.strokeStyle = color;
-
-        this.colorPalette.element.childNodes.forEach(color =>
-            color.classList.remove('selected')
-        );
-        
-        element.classList.add('selected');
+    displayPalette() {
+        this.colorPalette.render();
     }
 }
