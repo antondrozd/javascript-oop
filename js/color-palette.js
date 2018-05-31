@@ -3,6 +3,8 @@ export default class ColorPalette {
         this.element = element;
         this.colors = colors;
         this._currentColor = 'black';
+
+        this.handleBrushColorChange = this.handleBrushColorChange.bind(this);
     }
 
     get currentColor() {
@@ -23,12 +25,12 @@ export default class ColorPalette {
 
         this.element.addEventListener(
             'click',
-            this.handleBrushColorChange.bind(this)
+            this.handleBrushColorChange
         );
     }
 
     handleBrushColorChange({ target }) {
-        if (target.tagName !== 'LI') return;
+        if (!target.classList.contains('color-palette__color')) return;
 
         const colorElement = target;
 
@@ -43,5 +45,17 @@ export default class ColorPalette {
         );
 
         colorElement.classList.add('selected');
+    }
+
+    addColor(color) {
+        this.colors.push(color);
+
+        this.render();
+
+        // this.element.lastChild.dispatchEvent(new Event('click'), {
+        //     bubbles: true
+        // });
+
+        this.handleBrushColorChange({ target: this.element.lastChild });
     }
 }

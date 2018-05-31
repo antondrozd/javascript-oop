@@ -1,8 +1,10 @@
 export default class App {
-    constructor({ canvas, colorPalette }) {
+    constructor({ canvas, colorPalette, colorPicker }) {
         this.canvas = canvas;
         this.colorPalette = colorPalette;
+        this.colorPicker = colorPicker;
 
+        this.colorPickerButton;
         this.clearCanvasButton;
         this.brushSizeSlider;
 
@@ -18,9 +20,14 @@ export default class App {
     init() {
         this.context = this.canvas.getContext('2d');
 
+        this.colorPickerButton = document.querySelector('#new-color-button');
         this.clearCanvasButton = document.querySelector('#clear-canvas-button');
         this.brushSizeSlider = document.querySelector('#brush-size-slider');
 
+        this.colorPickerButton.addEventListener(
+            'click',
+            this.colorPicker.open
+        );
         this.clearCanvasButton.addEventListener(
             'click',
             this.handleCanvasClear
@@ -46,6 +53,8 @@ export default class App {
             'mouseleave',
             this.handleCanvasMouseleave.bind(this)
         );
+
+        this.colorPicker.onAdd = color => this.colorPalette.addColor(color);
 
         this.displayPalette();
     }
