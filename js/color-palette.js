@@ -1,61 +1,96 @@
+import Color from './color.js';
+
 export default class ColorPalette {
-    constructor({ element, colors }) {
+    constructor({
+        element,
+        colors = [new Color(0, 0, 0)],
+        maxColorsAmount = 7
+    }) {
         this.element = element;
         this.colors = colors;
-        this._currentColor = 'black';
+        this.maxColorsAmount = maxColorsAmount;
+        this.currentColor = colors[0];
+        this._currentColorIndex = 0;
 
-        this.handleBrushColorChange = this.handleBrushColorChange.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
 
-    get currentColor() {
-        return this._currentColor;
+    get currentColorIndex() {
+        return this._currentColorIndex;
+    }
+
+    set currentColorIndex(id) {
+        this._currentColorIndex = +id;
+        this.currentColor = this.colors[this.currentColorIndex];
+        this.displaySelected();
+    }
+
+    get lastColorIndex() {
+        return this.colors.length - 1;
     }
 
     render() {
         let html = '';
 
-        const elements = this.colors.map(
-            color =>
-                (html += `<li class="color-palette__color" style="background-color: rgb(${
-                    color.red
-                }, ${color.green}, ${color.blue});"></li>`)
+        this.colors.forEach(
+            (color, index) =>
+                (html += `<li id=${index} class="color-palette__color" style="background-color: ${color.toString()};"><span class="color-palette__remove-color"></span></li>`)
         );
 
         this.element.innerHTML = html;
 
-        this.element.addEventListener(
-            'click',
-            this.handleBrushColorChange
-        );
+        this.element.addEventListener('click', this.handleClick);
+
+        this.displaySelected();
     }
 
-    handleBrushColorChange({ target }) {
-        if (!target.classList.contains('color-palette__color')) return;
-
-        const colorElement = target;
-
-        this._currentColor = colorElement.style.backgroundColor;
-
-        this.displaySelected(colorElement);
+    handleClick({ target }) {
+        if (target.classList.contains('color-palette__color'))
+            this.handleColorChange(target.id);
+        if (target.classList.contains('color-palette__remove-color'))
+            this.handleColorRemove(target.parentNode.id);
     }
 
-    displaySelected(colorElement) {
-        this.element.childNodes.forEach(color =>
-            color.classList.remove('selected')
-        );
+    handleColorChange(id) {
+        this.selectColor(id);
+    }
 
-        colorElement.classList.add('selected');
+    handleColorRemove(id) {
+        if (this.colors.length > 1) {
+            this.colors.splice(id, 1);
+
+            if (id < this.currentColorIndex) {
+                this.currentColorIndex -= 1;
+            }
+
+            this.render();
+        }
+    }
+
+    selectColor(id) {
+        this.currentColorIndex = id;
+    }
+
+    displaySelected() {
+        this.element.childNodes.forEach(colorElement => {
+            colorElement.classList.remove('selected');
+
+            if (colorElement.id == this.currentColorIndex) {
+                colorElement.classList.add('selected');
+            }
+        });
     }
 
     addColor(color) {
+        if (this.colors.length === this.maxColorsAmount) {
+            alert(
+                'Слишком много цветов в палитре! Удалите один или несколько цветов.'
+            );
+            return;
+        }
+
         this.colors.push(color);
-
         this.render();
-
-        // this.element.lastChild.dispatchEvent(new Event('click'), {
-        //     bubbles: true
-        // });
-
-        this.handleBrushColorChange({ target: this.element.lastChild });
+        this.currentColorIndex = this.lastColorIndex;
     }
 }

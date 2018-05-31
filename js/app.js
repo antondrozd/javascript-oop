@@ -68,22 +68,22 @@ export default class App {
         if (this.isDrawing) {
             this.context.beginPath();
             this.context.moveTo(this.lastEvent.offsetX, this.lastEvent.offsetY);
-            this.context.strokeStyle = this.colorPalette.currentColor;
+            this.context.strokeStyle = this.colorPalette.currentColor.toString();
             this.context.lineTo(event.offsetX, event.offsetY);
             this.context.stroke();
             this.lastEvent = event;
         }
     }
 
-    handleCanvasMouseup(event) {
+    handleCanvasMouseup() {
         this.isDrawing = false;
     }
 
-    handleCanvasMouseleave(event) {
+    handleCanvasMouseleave() {
         this.isDrawing = false;
     }
 
-    handleCanvasClear(event) {
+    handleCanvasClear() {
         this.context.fillStyle = 'white';
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }

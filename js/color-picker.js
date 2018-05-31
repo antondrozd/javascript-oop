@@ -1,7 +1,9 @@
+import Color from './color.js';
+
 export default class ColorPicker {
     constructor({ element }) {
         this.element = element;
-        this._color = { red: 0, green: 0, blue: 0 };
+        this._color = new Color(0, 0, 0);
 
         this.redRangeElement;
         this.greenRangeElement;
@@ -65,26 +67,24 @@ export default class ColorPicker {
     }
 
     displayPreview() {
-        this.previewElement.style.backgroundColor = `rgb(${this.color.red}, ${
-            this.color.green
-        }, ${this.color.blue})`;
+        this.previewElement.style.backgroundColor = this.color.toString();
     }
 
     setRedValue(red) {
-        this.color = { ...this.color, red };
+        this.color = Object.assign(this.color, { red });
     }
 
     setGreenValue(green) {
-        this.color = { ...this.color, green };
+        this.color = Object.assign(this.color, { green });
     }
 
     setBlueValue(blue) {
-        this.color = { ...this.color, blue };
+        this.color = Object.assign(this.color, { blue });
     }
 
     reset() {
-        this.color = { red: 0, green: 0, blue: 0 };
-        
+        this.color = new Color(0, 0, 0);
+
         this.redRangeElement.value = 0;
         this.greenRangeElement.value = 0;
         this.blueRangeElement.value = 0;
