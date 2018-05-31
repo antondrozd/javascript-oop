@@ -1,3 +1,7 @@
+* {
+    user-select: none;
+}
+
 body {
     background: #384047;
     font-family: sans-serif;
