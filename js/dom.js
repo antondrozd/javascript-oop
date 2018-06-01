@@ -18,6 +18,6 @@ export function createElement(tag, props, ...children) {
 
         element.appendChild(child);
     });
-  
+
     return element;
 }

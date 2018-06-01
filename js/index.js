@@ -6,12 +6,34 @@ const todoList = document.getElementById('todo-list');
 const todoItems = document.querySelectorAll('.todo-item');
 
 function createTodoItem(title) {
-    const checkbox = createElement('input', { type: 'checkbox', className: 'checkbox' });
+    const checkbox = createElement('input', {
+        type: 'checkbox',
+        className: 'checkbox'
+    });
     const label = createElement('label', { className: 'title' }, title);
-    const editInput = createElement('input', { type: 'text', className: 'textfield' });
-    const editButton = createElement('button', { className: 'edit' }, 'Изменить');
-    const deleteButton = createElement('button', { className: 'delete' }, 'Удалить');
-    const listItem = createElement('li', { className: 'todo-item' }, checkbox, label, editInput, editButton, deleteButton);
+    const editInput = createElement('input', {
+        type: 'text',
+        className: 'textfield'
+    });
+    const editButton = createElement(
+        'button',
+        { className: 'edit' },
+        'Изменить'
+    );
+    const deleteButton = createElement(
+        'button',
+        { className: 'delete' },
+        'Удалить'
+    );
+    const listItem = createElement(
+        'li',
+        { className: 'todo-item' },
+        checkbox,
+        label,
+        editInput,
+        editButton,
+        deleteButton
+    );
 
     bindEvents(listItem);
 
