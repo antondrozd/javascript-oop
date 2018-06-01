@@ -50,5 +50,5 @@ git checkout task3
 ### Задание №3 (решение)
 
 ```sh
-git checkout task2_solution
+git checkout task3_solution
 ```
