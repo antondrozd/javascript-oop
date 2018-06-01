@@ -1,7 +1,10 @@
 import Color from './color.js';
+import { EventEmitter } from './helpers.js';
 
-export default class ColorPicker {
+export default class ColorPicker extends EventEmitter {
     constructor({ element }) {
+        super();
+
         this.element = element;
         this._color = new Color(0, 0, 0);
 
@@ -91,7 +94,7 @@ export default class ColorPicker {
     }
 
     handleColorAdd() {
-        this.onAdd(this.color);
+        this.emit('colorAdd', this.color);
         this.reset();
         this.close();
     }

@@ -24,10 +24,7 @@ export default class App {
         this.clearCanvasButton = document.querySelector('#clear-canvas-button');
         this.brushSizeSlider = document.querySelector('#brush-size-slider');
 
-        this.colorPickerButton.addEventListener(
-            'click',
-            this.colorPicker.open
-        );
+        this.colorPickerButton.addEventListener('click', this.colorPicker.open);
         this.clearCanvasButton.addEventListener(
             'click',
             this.handleCanvasClear
@@ -54,7 +51,9 @@ export default class App {
             this.handleCanvasMouseleave.bind(this)
         );
 
-        this.colorPicker.onAdd = color => this.colorPalette.addColor(color);
+        this.colorPicker.on('colorAdd', color =>
+            this.colorPalette.addColor(color)
+        );
 
         this.displayPalette();
     }
