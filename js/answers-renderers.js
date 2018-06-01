@@ -1,3 +1,5 @@
+import { EventEmitter } from './helpers.js';
+
 export function createAnswersRenderer(type, answers) {
     switch (type) {
         case 'single':
@@ -9,21 +11,23 @@ export function createAnswersRenderer(type, answers) {
     }
 }
 
-class SingleAnswerRenderer {
+class SingleAnswerRenderer extends EventEmitter {
     /**
      * @param {string[]} answers Варианты ответов
      */
     constructor(answers) {
+        super();
+        
         this.answers = answers;
         this.answersContainer = document.querySelector('#answers');
     }
 
     /**
      * Создает DOM-елементы вариантов ответов. Подписывается на событие выбора ответа и обрабатывает его. Возвращает массив с DOM-элементом.
-     * 
-     * @param {Function} onAnswerSelect 
+     *
+     * @param {Function} onAnswerSelect
      */
-    render(onAnswerSelect) {
+    render() {
         const elements = this.answers.map((answer, index) => {
             let li = document.createElement('li');
 
@@ -31,11 +35,11 @@ class SingleAnswerRenderer {
             li.textContent = answer;
 
             li.addEventListener('click', ({ target }) => {
-                this.answersContainer.childNodes.forEach(
-                    element => element.classList.remove('active')
+                this.answersContainer.childNodes.forEach(element =>
+                    element.classList.remove('active')
                 );
 
-                onAnswerSelect(index);
+                this.emit('setAnswer', index);
 
                 target.classList.add('active');
             });
@@ -47,20 +51,22 @@ class SingleAnswerRenderer {
     }
 }
 
-class MultipleAnswersRenderer {
+class MultipleAnswersRenderer extends EventEmitter {
     /**
      * @param {string[]} answers Варианты ответов
      */
     constructor(answers) {
+        super();
+        
         this.answers = answers;
     }
 
     /**
      * Создает DOM-елементы вариантов ответов. Подписывается на событие выбора ответа и обрабатывает его. Возвращает массив DOM-элементов.
-     * 
-     * @param {Function} onAnswerSelect 
+     *
+     * @param {Function} onAnswerSelect
      */
-    render(onAnswerSelect) {
+    render() {
         const elements = this.answers.map((answer, index) => {
             let li = document.createElement('li');
 
@@ -68,7 +74,7 @@ class MultipleAnswersRenderer {
             li.textContent = answer;
 
             li.addEventListener('click', ({ target }) => {
-                onAnswerSelect(index);
+                this.emit('setAnswer', index);
 
                 target.classList.toggle('active');
             });
@@ -80,13 +86,13 @@ class MultipleAnswersRenderer {
     }
 }
 
-class OpenAnswerRenderer {
+class OpenAnswerRenderer extends EventEmitter {
     /**
      * Создает DOM-елемент поля для ответа. Подписывается на событие ввода ответа и обрабатывает его. Возвращает массив с DOM-элементом.
-     * 
-     * @param {Function} onAnswerSelect 
+     *
+     * @param {Function} onAnswerSelect
      */
-    render(onAnswerChange) {
+    render() {
         let li = document.createElement('li');
 
         li.classList.add('list-group-item');
@@ -98,7 +104,7 @@ class OpenAnswerRenderer {
         input.classList.add('form-control');
 
         input.addEventListener('input', () => {
-            onAnswerChange(input.value);
+            this.emit('setAnswer', input.value);
         });
 
         li.appendChild(input);

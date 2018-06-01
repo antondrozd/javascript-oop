@@ -74,9 +74,9 @@ export default class App {
     displayAnswers() {
         this.answersContainer.innerHTML = '';
 
-        let elements = this.quiz.currentQuestion.answersRenderer.render(
-            this.quiz.onAnswer
-        );
+        this.quiz.currentQuestion.answersRenderer.on('setAnswer', this.quiz.onAnswer);
+
+        let elements = this.quiz.currentQuestion.answersRenderer.render();
 
         elements.forEach(element => {
             this.answersContainer.appendChild(element);
