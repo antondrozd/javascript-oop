@@ -14,6 +14,19 @@ export default class View {
         this.todoList = document.getElementById('todo-list');
 
         this.todoForm.addEventListener('submit', this.handleAdd.bind(this));
+
+        this.model.todos.forEach(todo => {
+            this.addTodoItem(todo);
+
+            if (todo.isCompleted) {
+                const todoItem = this._getTodoItem(todo.id);
+                const checkbox = todoItem.querySelector('.checkbox');
+
+                checkbox.checked = true;
+
+                this.toggleTodoItem(todo.id);
+            }
+        });
     }
 
     initController(controller) {

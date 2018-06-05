@@ -3,6 +3,10 @@ export default class Model {
         this._todos = todos;
     }
 
+    get todos() {
+        return this._todos;
+    }
+
     addTodo(todo) {
         this._todos.push(todo);
     }
