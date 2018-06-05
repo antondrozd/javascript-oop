@@ -148,6 +148,10 @@ header h1 {
     display: block;
 }
 
+.todo-item.editing .edit {
+    opacity: 1;
+}
+
 .todo-item button {
     opacity: 0;
     transition: all .2s;
