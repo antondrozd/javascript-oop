@@ -4,34 +4,24 @@ body {
 }
 
 #grid {
-    padding-bottom: 10px;
+    display: grid;
+    margin: 0 auto;
+    margin-bottom: 15px;
+    border: 1px solid lightgray;
+    border-top: none;
+    border-left: none;
 }
 
-table {
-    border-spacing: 0px;
-    margin: auto;
-}
-
-td {
+.grid-cell {
     border: 1px solid lightgray;
     border-right: none;
     border-bottom: none;
-    width: 20px;
-    height: 20px;
     background-color: transparent;
     cursor: pointer;
     transition: background-color .1s;
 }
 
-td:last-child {
-    border-right: 1px solid lightgray;
-}
-
-tr:last-child td {
-    border-bottom: 1px solid lightgray;
-}
-
-td.alive {
+.grid-cell.alive {
     background-color: #00FF00;
 }
 
