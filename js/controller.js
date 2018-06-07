@@ -41,4 +41,12 @@ export default class Controller {
     play() {
         this.model.play();
     }
+
+    pause() {
+        this.model.pause();
+    }
+
+    setSpeed(speed) {
+        this.model.setSpeed(speed);
+    }
 }

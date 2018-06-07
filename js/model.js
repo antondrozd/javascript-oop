@@ -7,6 +7,7 @@ export default class Model extends EventEmitter {
 
         this.gridSize = gridSize;
         this.gameSpeed = 100;
+        this.isPlaying = false;
         this.grid;
 
         this.computeNextGrid = this.computeNextGrid.bind(this);
@@ -67,15 +68,24 @@ export default class Model extends EventEmitter {
 
     play() {
         this.interval = setInterval(this.computeNextGrid, this.gameSpeed);
+        this.isPlaying = true;
+
+        this.emit('play');
     }
 
     pause() {
         clearInterval(this.interval);
         this.interval = null;
+        this.isPlaying = false;
+
+        this.emit('pause');
     }
 
     setSpeed(speed) {
         this.gameSpeed = speed;
+
+        clearInterval(this.interval);
+        this.interval = setInterval(this.computeNextGrid, this.gameSpeed);
     }
 
     _countAliveNeighbors(cell) {

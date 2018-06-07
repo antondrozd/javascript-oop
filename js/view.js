@@ -12,6 +12,8 @@ export default class View {
         this.model.on('die', this.die.bind(this));
         this.model.on('randomGridFill', this.randomGridFill.bind(this));
         this.model.on('compute', this.displayCurrentGrid.bind(this));
+        this.model.on('play', this.play.bind(this));
+        this.model.on('pause', this.pause.bind(this));
     }
 
     init() {
@@ -19,6 +21,7 @@ export default class View {
         this.clearBtn = document.querySelector('#reset-button');
         this.randomGridFillBtn = document.querySelector('#randomize-button');
         this.startStopBtn = document.querySelector('#play-button');
+        this.speedRange = document.querySelector('#speed-slider');
 
         this.gridContainer.addEventListener(
             'click',
@@ -35,6 +38,11 @@ export default class View {
         this.startStopBtn.addEventListener(
             'click',
             this.handleStartStopBtnClick.bind(this)
+        );
+
+        this.speedRange.addEventListener(
+            'input',
+            this.handleSpeedChange.bind(this)
         );
     }
 
@@ -83,7 +91,17 @@ export default class View {
     }
 
     handleStartStopBtnClick() {
-        this.controller.play();
+        if (!this.model.isPlaying) {
+            this.controller.play();
+        } else {
+            this.controller.pause();
+        }
+    }
+
+    handleSpeedChange() {
+        const speed = this.speedRange.value;
+
+        this.controller.setSpeed(speed);
     }
 
     live({ row, col }) {
@@ -124,6 +142,14 @@ export default class View {
                 cellElement.classList.add('alive');
             }
         });
+    }
+
+    play() {
+        this.startStopBtn.textContent = 'pause';
+    }
+
+    pause() {
+        this.startStopBtn.textContent = 'play_arrow';
     }
 
     _getCellElement({ row, col }) {
