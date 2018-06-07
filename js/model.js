@@ -84,8 +84,10 @@ export default class Model extends EventEmitter {
     setSpeed(speed) {
         this.gameSpeed = speed;
 
-        clearInterval(this.interval);
-        this.interval = setInterval(this.computeNextGrid, this.gameSpeed);
+        if (this.isPlaying) {
+            clearInterval(this.interval);
+            this.interval = setInterval(this.computeNextGrid, this.gameSpeed);
+        }
     }
 
     _countAliveNeighbors(cell) {
