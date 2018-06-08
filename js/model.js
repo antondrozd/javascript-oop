@@ -34,6 +34,8 @@ export default class Model extends EventEmitter {
     clearGrid() {
         this.grid.forEachCell(cell => cell.die());
 
+        this.pause();
+
         this.emit('clearGrid');
     }
 
