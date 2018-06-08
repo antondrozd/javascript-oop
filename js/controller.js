@@ -12,30 +12,20 @@ export default class Controller {
         this.view.createGrid({ size });
     }
 
-    live(element) {
-        const row = element.getAttribute('data-row');
-        const col = element.getAttribute('data-col');
-
+    live({ row, col }) {
         this.model.live({ row, col });
-        // this.view.live(element);
     }
 
-    die(element) {
-        const row = element.getAttribute('data-row');
-        const col = element.getAttribute('data-col');
-
+    die({ row, col }) {
         this.model.die({ row, col });
-        // this.view.die(element);
     }
 
     clearGrid() {
         this.model.clearGrid();
-        // this.view.clearGrid();
     }
 
-    randomGridFill() {
-        this.model.randomGridFill();
-        // this.view.randomGridFill();
+    randomGrid() {
+        this.model.computeRandomGrid();
     }
 
     play() {
@@ -47,6 +37,6 @@ export default class Controller {
     }
 
     setSpeed(speed) {
-        this.model.setSpeed(speed);
+        this.model.setSpeed(+speed);
     }
 }

@@ -10,8 +10,7 @@ export default class View {
         this.model.on('clearGrid', this.clearGrid.bind(this));
         this.model.on('live', this.live.bind(this));
         this.model.on('die', this.die.bind(this));
-        this.model.on('randomGridFill', this.randomGridFill.bind(this));
-        this.model.on('compute', this.displayCurrentGrid.bind(this));
+        this.model.on('compute', this.displayUpdatedGrid.bind(this));
         this.model.on('play', this.play.bind(this));
         this.model.on('pause', this.pause.bind(this));
     }
@@ -32,7 +31,7 @@ export default class View {
 
         this.randomGridFillBtn.addEventListener(
             'click',
-            this.handleRandomGridFill.bind(this)
+            this.handleRandomGrid.bind(this)
         );
 
         this.startStopBtn.addEventListener(
@@ -75,10 +74,13 @@ export default class View {
 
         if (element.id === 'grid') return;
 
+        const row = element.getAttribute('data-row');
+        const col = element.getAttribute('data-col');
+
         if (!element.classList.contains('alive')) {
-            this.controller.live(element);
+            this.controller.live({ row, col });
         } else {
-            this.controller.die(element);
+            this.controller.die({ row, col });
         }
     }
 
@@ -86,8 +88,8 @@ export default class View {
         this.controller.clearGrid();
     }
 
-    handleRandomGridFill() {
-        this.controller.randomGridFill();
+    handleRandomGrid() {
+        this.controller.randomGrid();
     }
 
     handleStartStopBtnClick() {
@@ -122,24 +124,14 @@ export default class View {
         );
     }
 
-    randomGridFill() {
+    displayUpdatedGrid() {
         this.model.grid.forEachCell((cell, row, col) => {
             const cellElement = this._getCellElement({ row, col });
 
             if (cell.isAlive) {
                 cellElement.classList.add('alive');
-            }
-        });
-    }
-
-    displayCurrentGrid() {
-        this.clearGrid();
-
-        this.model.grid.forEachCell((cell, row, col) => {
-            const cellElement = this._getCellElement({ row, col });
-
-            if (cell.isAlive) {
-                cellElement.classList.add('alive');
+            } else {
+                cellElement.classList.remove('alive');
             }
         });
     }

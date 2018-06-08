@@ -37,7 +37,7 @@ export default class Model extends EventEmitter {
         this.emit('clearGrid');
     }
 
-    randomGridFill() {
+    computeRandomGrid() {
         this.clearGrid();
 
         this.grid.forEachCell(cell => {
@@ -46,7 +46,7 @@ export default class Model extends EventEmitter {
             }
         });
 
-        this.emit('randomGridFill');
+        this.emit('compute');
     }
 
     computeNextGrid() {
@@ -76,6 +76,7 @@ export default class Model extends EventEmitter {
     pause() {
         clearInterval(this.interval);
         this.interval = null;
+
         this.isPlaying = false;
 
         this.emit('pause');
@@ -90,60 +91,23 @@ export default class Model extends EventEmitter {
         }
     }
 
-    _countAliveNeighbors(cell) {
-        const row = cell.row;
-        const col = cell.col;
-
+    _countAliveNeighbors({ row, col }) {
         let count = 0;
 
-        if (
-            this.grid.cells[row - 1] &&
-            this.grid.cells[row - 1][col - 1] &&
-            this.grid.cells[row - 1][col - 1].isAlive
-        )
-            count += 1;
-        if (
-            this.grid.cells[row - 1] &&
-            this.grid.cells[row - 1][col] &&
-            this.grid.cells[row - 1][col].isAlive
-        )
-            count += 1;
-        if (
-            this.grid.cells[row - 1] &&
-            this.grid.cells[row - 1][col + 1] &&
-            this.grid.cells[row - 1][col + 1].isAlive
-        )
-            count += 1;
-        if (
-            this.grid.cells[row] &&
-            this.grid.cells[row][col + 1] &&
-            this.grid.cells[row][col + 1].isAlive
-        )
-            count += 1;
-        if (
-            this.grid.cells[row + 1] &&
-            this.grid.cells[row + 1][col + 1] &&
-            this.grid.cells[row + 1][col + 1].isAlive
-        )
-            count += 1;
-        if (
-            this.grid.cells[row + 1] &&
-            this.grid.cells[row + 1][col] &&
-            this.grid.cells[row + 1][col].isAlive
-        )
-            count += 1;
-        if (
-            this.grid.cells[row + 1] &&
-            this.grid.cells[row + 1][col - 1] &&
-            this.grid.cells[row + 1][col - 1].isAlive
-        )
-            count += 1;
-        if (
-            this.grid.cells[row] &&
-            this.grid.cells[row][col - 1] &&
-            this.grid.cells[row][col - 1].isAlive
-        )
-            count += 1;
+        for (let r = -1; r <= 1; r++) {
+            if (!this.grid.cells[row + r]) continue;
+
+            for (let c = -1; c <= 1; c++) {
+                if (r === 0 && c === 0) continue;
+
+                if (
+                    this.grid.cells[row + r][col + c] &&
+                    this.grid.cells[row + r][col + c].isAlive
+                ) {
+                    count += 1;
+                }
+            }
+        }
 
         return count;
     }

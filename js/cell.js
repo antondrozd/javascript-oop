@@ -1,5 +1,5 @@
 export default class Cell {
-    constructor({ row, col, isAlive = false}) {
+    constructor({ row, col, isAlive = false }) {
         this._row = row;
         this._col = col;
         this._isAlive = isAlive;
