@@ -3,6 +3,7 @@ export default class View {
         this.model = model;
         this.controller;
 
+        this.gridSize = model.gridSize;
         this.cellSize = 17;
 
         this.init();
@@ -18,8 +19,8 @@ export default class View {
     init() {
         this.gridContainer = document.querySelector('#grid');
         this.clearBtn = document.querySelector('#reset-button');
-        this.randomGridFillBtn = document.querySelector('#randomize-button');
-        this.startStopBtn = document.querySelector('#play-button');
+        this.randomGridBtn = document.querySelector('#randomize-button');
+        this.togglePlayBtn = document.querySelector('#play-button');
         this.speedRange = document.querySelector('#speed-slider');
 
         this.gridContainer.addEventListener(
@@ -29,14 +30,14 @@ export default class View {
 
         this.clearBtn.addEventListener('click', this.handleClear.bind(this));
 
-        this.randomGridFillBtn.addEventListener(
+        this.randomGridBtn.addEventListener(
             'click',
             this.handleRandomGrid.bind(this)
         );
 
-        this.startStopBtn.addEventListener(
+        this.togglePlayBtn.addEventListener(
             'click',
-            this.handleStartStopBtnClick.bind(this)
+            this.handleTogglePlayBtnClick.bind(this)
         );
 
         this.speedRange.addEventListener(
@@ -61,10 +62,10 @@ export default class View {
         this.gridContainer.appendChild(docFr);
 
         Object.assign(this.gridContainer.style, {
-            width: `${this.model.gridSize * this.cellSize}px`,
-            height: `${this.model.gridSize * this.cellSize}px`,
-            gridTemplate: `repeat(${this.model.gridSize}, 1fr) / repeat(${
-                this.model.gridSize
+            width: `${this.gridSize * this.cellSize}px`,
+            height: `${this.gridSize * this.cellSize}px`,
+            gridTemplate: `repeat(${this.gridSize}, 1fr) / repeat(${
+                this.gridSize
             }, 1fr)`
         });
     }
@@ -92,7 +93,7 @@ export default class View {
         this.controller.randomGrid();
     }
 
-    handleStartStopBtnClick() {
+    handleTogglePlayBtnClick() {
         if (!this.model.isPlaying) {
             this.controller.play();
         } else {
@@ -137,11 +138,11 @@ export default class View {
     }
 
     play() {
-        this.startStopBtn.textContent = 'pause';
+        this.togglePlayBtn.textContent = 'pause';
     }
 
     pause() {
-        this.startStopBtn.textContent = 'play_arrow';
+        this.togglePlayBtn.textContent = 'play_arrow';
     }
 
     _getCellElement({ row, col }) {
